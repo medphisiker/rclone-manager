@@ -1,0 +1,28 @@
+[Unit]
+Description=Rclone mount for %i (read-write)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/rclone mount %i /home/%u/mnt/%i \
+    --allow-other \
+    --vfs-cache-mode full \
+    --vfs-cache-max-size 5G \
+    --vfs-read-chunk-size 64M \
+    --vfs-read-ahead 256M \
+    --buffer-size 64M \
+    --no-checksum \
+    --no-modtime \
+    --log-level INFO \
+    --log-file /home/%u/.cache/rclone/rclone-%i-rw.log
+ExecStop=/bin/fusermount -u /home/%u/mnt/%i
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+Environment=PATH=/usr/bin:/bin:/usr/local/bin
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,34 @@
+# Rclone Manager Aliases
+# Документация: https://github.com/medphisiker/rclone-manager
+# Добавьте эти строки в ~/.bashrc или ~/.zshrc
+
+# Базовые команды
+alias rmro='rclone_manager.sh ro'          # Все облака в read-only режим
+alias rmrw='rclone_manager.sh rw'          # Все облака в read-write режим
+alias rmt='rclone_manager.sh toggle'       # Переключить режим для всех
+alias rms='rclone_manager.sh st'           # Показать статус
+
+# Команды для конкретных облаков
+alias rmro_yandex='rclone_manager.sh ro yandex_disk'      # Яндекс Диск в read-only
+alias rmrw_yandex='rclone_manager.sh rw yandex_disk'      # Яндекс Диск в read-write
+alias rmt_yandex='rclone_manager.sh toggle yandex_disk'   # Переключить Яндекс Диск
+alias rms_yandex='rclone_manager.sh st yandex_disk'       # Статус Яндекс Диска
+
+alias rmro_mail='rclone_manager.sh ro mail_ru'            # Mail.ru в read-only
+alias rmrw_mail='rclone_manager.sh rw mail_ru'            # Mail.ru в read-write
+alias rmt_mail='rclone_manager.sh toggle mail_ru'         # Переключить Mail.ru
+alias rms_mail='rclone_manager.sh st mail_ru'             # Статус Mail.ru
+
+# Управление
+alias rmstop='rclone_manager.sh stop'        # Остановить все облака
+alias rmstop_all='rclone_manager.sh stop'    # Остановить все (альтернатива)
+
+# Быстрая проверка статуса
+alias rmst='rclone_manager.sh st'            # Статус всех облаков
+
+# Примеры использования:
+# rmro                    # Подключить все облака в безопасном режиме
+# rmrw_yandex             # Яндекс Диск в режим записи
+# rmt_mail                # Переключить режим Mail.ru
+# rms                     # Проверить статус
+# rmstop                  # Остановить все

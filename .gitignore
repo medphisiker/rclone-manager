@@ -1,0 +1,28 @@
+# Logs
+*.log
+
+# Cache
+.cache/
+.cache/rclone/
+
+# Mount points (локальные)
+mnt/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp
+*.tmp
+*.swp
+*~
+
+# Secrets
+*.env
+*.key
+config.json
+secrets.json

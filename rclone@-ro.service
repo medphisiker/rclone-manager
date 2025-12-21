@@ -1,0 +1,24 @@
+[Unit]
+Description=Rclone mount for %i (read-only)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/rclone mount %i /home/%u/mnt/%i \
+    --allow-other \
+    --read-only \
+    --vfs-cache-mode off \
+    --no-checksum \
+    --no-modtime \
+    --log-level INFO \
+    --log-file /home/%u/.cache/rclone/rclone-%i-ro.log
+ExecStop=/bin/fusermount -u /home/%u/mnt/%i
+Restart=on-failure
+RestartSec=5
+Environment=PATH=/usr/bin:/bin:/usr/local/bin
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
