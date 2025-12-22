@@ -2,7 +2,7 @@
 # Rclone Manager - Управление режимами доступа к облачным дискам
 # Версия: 1.0.0
 
-set -e
+# set -e
 
 # Цвета для вывода
 RED='\033[0;31m'
@@ -12,12 +12,13 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Список поддерживаемых облаков
-CLOUDS=("yandex_disk" "mail_ru")
+CLOUDS=("yandex_disk" "mail_ru" "google_drive")
 
 # Пути к точкам монтирования
 declare -A MOUNT_POINTS=(
     ["yandex_disk"]="$HOME/mnt/yandex_disk"
     ["mail_ru"]="$HOME/mnt/mail_ru"
+    ["google_drive"]="$HOME/mnt/google_drive"
 )
 
 # Показать использование
@@ -71,7 +72,10 @@ create_mount_point() {
 check_service_status() {
     local cloud=$1
     local mode=$2
-    local service_name="rclone@${cloud}-${mode}.service"
+    local service_name="rclone-${mode}@${cloud}.service"
+    
+    # Debug output (temporary)
+    # echo "Checking $service_name..." >&2
     
     if systemctl --user is-active --quiet "$service_name"; then
         return 0
@@ -107,8 +111,18 @@ mount_cloud() {
     
     # Создаем точку монтирования
     create_mount_point "$cloud"
+    local mount_point="${MOUNT_POINTS[$cloud]}"
     
-    local service_name="rclone@${cloud}-${mode}.service"
+    # Жесткая очистка перед запуском
+    if mount | grep -q "$mount_point" || [ -d "$mount_point" ]; then
+        # Пытаемся размонтировать, если что-то есть
+        fusermount -uz "$mount_point" 2>/dev/null || true
+        # Если папка все еще занята rclone (проверка процессов)
+        pgrep -f "rclone mount $cloud:" | xargs kill -9 2>/dev/null || true
+        sleep 1
+    fi
+
+    local service_name="rclone-${mode}@${cloud}.service"
     
     echo -e "${BLUE}Запуск $cloud в режиме $mode...${NC}"
     
@@ -139,7 +153,7 @@ stop_cloud() {
     local stopped=false
     
     for mode in ro rw; do
-        local service_name="rclone@${cloud}-${mode}.service"
+        local service_name="rclone-${mode}@${cloud}.service"
         
         if systemctl --user is-active --quiet "$service_name"; then
             if [ "$quiet" != "true" ]; then

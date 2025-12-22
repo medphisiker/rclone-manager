@@ -4,11 +4,18 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-Type=notify
-ExecStart=/usr/bin/rclone mount %i /home/%u/mnt/%i \
+Type=simple
+ExecStartPre=-/bin/fusermount -uz /home/%u/mnt/%i
+ExecStart=/usr/bin/rclone mount %i: /home/%u/mnt/%i \
     --allow-other \
     --read-only \
-    --vfs-cache-mode off \
+    --vfs-cache-mode full \
+    --vfs-cache-max-size 10G \
+    --vfs-read-chunk-size 32M \
+    --vfs-read-ahead 128M \
+    --buffer-size 32M \
+    --dir-cache-time 24h \
+    --attr-timeout 1h \
     --no-checksum \
     --no-modtime \
     --log-level INFO \

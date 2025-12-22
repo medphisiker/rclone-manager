@@ -47,6 +47,7 @@ echo ""
 echo "Создание директорий..."
 mkdir -p "$HOME_DIR/mnt/yandex_disk"
 mkdir -p "$HOME_DIR/mnt/mail_ru"
+mkdir -p "$HOME_DIR/mnt/google_drive"
 mkdir -p "$HOME_DIR/.cache/rclone"
 mkdir -p "$HOME_DIR/.config/systemd/user"
 chown -R "$CURRENT_USER:$CURRENT_USER" "$HOME_DIR/mnt" "$HOME_DIR/.cache/rclone"
@@ -63,12 +64,12 @@ echo "✓ Скрипт установлен в /usr/local/bin/rclone_manager.sh"
 echo "Установка шаблонов systemd сервисов..."
 
 # Шаблон read-only
-cp "$PROJECT_DIR/rclone@-ro.service" "$HOME_DIR/.config/systemd/user/"
-chown "$CURRENT_USER:$CURRENT_USER" "$HOME_DIR/.config/systemd/user/rclone@-ro.service"
+cp "$PROJECT_DIR/rclone-ro@.service" "$HOME_DIR/.config/systemd/user/"
+chown "$CURRENT_USER:$CURRENT_USER" "$HOME_DIR/.config/systemd/user/rclone-ro@.service"
 
 # Шаблон read-write
-cp "$PROJECT_DIR/rclone@-rw.service" "$HOME_DIR/.config/systemd/user/"
-chown "$CURRENT_USER:$CURRENT_USER" "$HOME_DIR/.config/systemd/user/rclone@-rw.service"
+cp "$PROJECT_DIR/rclone-rw@.service" "$HOME_DIR/.config/systemd/user/"
+chown "$CURRENT_USER:$CURRENT_USER" "$HOME_DIR/.config/systemd/user/rclone-rw@.service"
 
 echo "✓ Шаблоны сервисов установлены"
 
